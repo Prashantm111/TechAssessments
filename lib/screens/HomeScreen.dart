@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:techassesment/data/Recharge.dart';
@@ -7,9 +6,7 @@ import 'package:techassesment/screens/HomeScreenViewModel.dart';
 import 'package:techassesment/screens/TopUpScreen.dart';
 
 import '../Color.dart';
-import '../HeightAndWidth.dart';
 import '../data/Beneficiary.dart';
-import '../services/database_helper.dart';
 import '../utils/AppWidgets.dart';
 import 'TopUpScreenViewModel.dart';
 
@@ -206,9 +203,12 @@ class _HomeScreenState extends State<Home> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       TextField(
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(RegExp("[0-9]"))
+                                        ],
                                         controller: addMoneyController,
                                         keyboardType: TextInputType.number,
-                                        maxLength: 20,
+                                        maxLength: 5,
                                         decoration: const InputDecoration(
                                           label: Text("Enter Amount"),
                                         ),
@@ -303,6 +303,9 @@ class _HomeScreenState extends State<Home> {
             ),
             TextField(
               controller: myControllerNumber,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp("[0-9]"))
+              ],
               keyboardType: TextInputType.phone,
               maxLength: 9,
               decoration: const InputDecoration(
