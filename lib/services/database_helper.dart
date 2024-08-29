@@ -138,18 +138,18 @@ class DatabaseHelper {
   }
 
   // Serach note by Id
-  Future<UserInfoModel> read(int id) async {
+  Future<UserInfoModel?> getUserByStatus(String status) async {
     final db = await database;
     final maps = await db.query(
       tableUserInfo,
-      where: '$colId = ?',
-      whereArgs: [id],
+      where: '$colStatus = ?',
+      whereArgs: [status],
     );
 
     if (maps.isNotEmpty) {
       return UserInfoModel.fromJson(maps.first);
     } else {
-      throw Exception('ID $id not found');
+      return null;
     }
   }
 
@@ -220,4 +220,5 @@ class DatabaseHelper {
     final db = await database;
     db.close();
   }
+
 }

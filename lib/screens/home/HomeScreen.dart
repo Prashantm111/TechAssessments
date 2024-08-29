@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:techassesment/common/bloc/app_bloc.dart';
 import 'package:techassesment/data/Recharge.dart';
 import 'package:techassesment/data/UserInfoModel.dart';
+import 'package:techassesment/main.dart';
 import 'package:techassesment/screens/HomeScreenViewModel.dart';
 import 'package:techassesment/screens/TopUpScreen.dart';
+import 'package:techassesment/screens/home/bloc/home_cubit.dart';
+import 'package:techassesment/services/database_helper.dart';
 
-import '../Color.dart';
-import '../data/Beneficiary.dart';
-import '../utils/AppWidgets.dart';
-import 'TopUpScreenViewModel.dart';
+import '../../Color.dart';
+import '../../data/Beneficiary.dart';
+import '../../utils/AppWidgets.dart';
+import '../TopUpScreenViewModel.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home-screen';
@@ -18,10 +23,32 @@ class HomeScreen extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as UserInfoModel;
+    UserInfoModel args = BlocProvider.of<AppBloc>(context).state.userInfoModel!;
 
-    return Home(
-      userInfoModel: args,
+    return BlocProvider<HomeCubit>(
+      create: (context) => HomeCubit(
+          databaseHelper: RepositoryProvider.of<DatabaseHelper>(context)),
+      child: Home(
+        userInfoModel: args,
+      ),
+    );
+  }
+}
+
+class HomeUi extends StatelessWidget {
+  const HomeUi({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<HomeCubit, HomeState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        return Scaffold(
+          body: Container(),
+        );
+      },
     );
   }
 }
@@ -47,6 +74,7 @@ class _HomeScreenState extends State<Home> {
     refreshList1();
     super.initState();
   }
+
   refreshList1() {
     _modelTopScreen.getAllRecharges(widget.userInfoModel.id).then((value) {
       setState(() {
@@ -54,17 +82,14 @@ class _HomeScreenState extends State<Home> {
         print("CCCCCCCCCCCCC  ${rechargeList.asMap()}");
       });
     });
-
-
   }
+
   refreshList() {
     _model.getAllBeneficiary(widget.userInfoModel.id).then((value) {
       setState(() {
         beneficiaryList = value;
       });
     });
-
-
   }
 
   @override
@@ -204,7 +229,8 @@ class _HomeScreenState extends State<Home> {
                                     children: [
                                       TextField(
                                         inputFormatters: [
-                                          FilteringTextInputFormatter.allow(RegExp("[0-9]"))
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp("[0-9]"))
                                         ],
                                         controller: addMoneyController,
                                         keyboardType: TextInputType.number,
@@ -406,10 +432,10 @@ class BeneficiaryRowCard extends StatelessWidget {
             style: TextStyle(color: Colors.black54, fontSize: 13),
           ),
           ElevatedButton(
-
             style: ElevatedButton.styleFrom(
                 backgroundColor: ColorSelect.primaryColor,
-                disabledBackgroundColor: ColorSelect.primaryColor.withOpacity(.5) ,
+                disabledBackgroundColor:
+                    ColorSelect.primaryColor.withOpacity(.5),
                 padding: const EdgeInsets.symmetric(horizontal: 6)),
             onPressed: () {
               Navigator.of(context).pushNamed(

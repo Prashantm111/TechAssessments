@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:techassesment/Color.dart';
+import 'package:techassesment/common/bloc/app_bloc.dart';
 import 'package:techassesment/data/UserInfoModel.dart';
-import 'package:techassesment/screens/HomeScreen.dart';
+import 'package:techassesment/screens/home/HomeScreen.dart';
 import 'package:techassesment/screens/TopUpScreen.dart';
+import 'package:techassesment/screens/login_screen.dart';
 import 'package:techassesment/services/database_helper.dart';
 import 'package:techassesment/utils/AppWidgets.dart';
-
-import 'HeightAndWidth.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,21 +20,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        HomeScreen.routeName: (ctx) => const HomeScreen(),
-        TopUpScreen.routeName: (ctx) => const TopUpScreen()
-      },
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return RepositoryProvider<DatabaseHelper>(
+      create: (context) => DatabaseHelper.instance,
+      child: BlocProvider<AppBloc>(
+        create: (context) => AppBloc(DatabaseHelper.instance),
+        child: MaterialApp(
+          routes: {
+            HomeScreen.routeName: (ctx) => const HomeScreen(),
+            TopUpScreen.routeName: (ctx) => const TopUpScreen()
+          },
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: const LoginScreen(),
+        ),
       ),
-      home: const MyHomePage(title: 'Technical Assessment'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+/*class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -52,26 +59,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  DatabaseHelper noteDatabase = DatabaseHelper.instance;
 
   List<UserInfoModel> totalUsers = [];
 
-  refreshNotes() {
-    print("LENGHT ${totalUsers.length}");
 
-    noteDatabase.getAllUsers().then((value) {
-      totalUsers = value;
-
-      if (totalUsers.length == 0) {
-        noteDatabase.insertUser(
-            UserInfoModel("Advert David", "+971555555551", "0", 3000.0));
-        noteDatabase.insertUser(
-            UserInfoModel("Robert Johnson", "+971555555552", "1",3500.0));
-        refreshNotes();
-
-      }
-    });
-  }
 
   @override
   void initState() {
@@ -81,7 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Orientation orientation = MediaQuery.of(context).orientation;
+    Orientation orientation = MediaQuery
+        .of(context)
+        .orientation;
     DatabaseHelper noteDatabase = DatabaseHelper.instance;
     return Scaffold(
       appBar: AppToolBar(toolbarTittle: widget.title),
@@ -155,4 +148,4 @@ class _MyHomePageState extends State<MyHomePage> {
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-}
+}*/
