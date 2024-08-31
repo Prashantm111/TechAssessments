@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 class UserInfoModel {
   // Define class properties
@@ -6,7 +6,7 @@ class UserInfoModel {
   String? name; // User name
   String? number; // User email
   String?  status;  // o true 1 false
-  double?  credit;  //
+  double?  credit;  // User amount
 
 
 

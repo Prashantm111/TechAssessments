@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:techassesment/resource/HeightAndWidth.dart';
 
-import '../Color.dart';
+import '../resource/Color.dart';
 
 class MyButton extends StatelessWidget {
   final String title;
@@ -76,5 +77,115 @@ class AppToolBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => const Size.fromHeight(HeightAndWidth.toolBarHeight);
 }
+
+class CenterProgressLoader extends StatelessWidget {
+  final Color backgroundColor;
+  final MaterialColor color;
+  final double strokeWidth;
+
+  const CenterProgressLoader({
+    super.key,
+    this.backgroundColor = Colors.black,
+    this.color = Colors.amber,
+    this.strokeWidth = 5,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(50),
+      height: 150,
+      width: 150,
+      decoration: BoxDecoration(
+        boxShadow: const [
+          BoxShadow(
+              color: Colors.black,
+              spreadRadius: 5,
+              blurRadius: 30,
+              offset: Offset(0, 5))
+        ],
+
+        color: Colors.white, //Border.all
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: CircularProgressIndicator(
+        backgroundColor: backgroundColor,
+        color: color,
+        strokeWidth: strokeWidth,
+      ),
+    );
+  }
+}
+
+class PriceCardItem extends StatelessWidget {
+  final int price;
+  final VoidCallback callback;
+
+  const PriceCardItem({
+    super.key,
+    required this.price,
+    required this.callback,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: callback,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 6),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            color: Colors.black12, borderRadius: BorderRadius.circular(8)),
+        child: Text(
+          "AED $price",
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+}
+
+String getInitials(String name) => name.isNotEmpty
+    ? name.trim().split(' ').map((l) => l[0]).take(2).join()
+    : '';
+
+Column UserProfileCardItem(BuildContext context, String name, String number) {
+  return Column(
+    children: [
+      Container(
+        height: 80,
+        width: 80,
+        decoration: BoxDecoration(
+          color: Colors.black87,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Center(
+          child: Text(
+            getInitials(name),
+            style: const TextStyle(color: Colors.white, fontSize: 35),
+          ),
+        ),
+      ),
+      const SizedBox(
+        height: 8,
+      ),
+      Text(
+        name,
+        style: const TextStyle(
+            color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      Text(
+        number,
+        style: const TextStyle(
+          color: Colors.black87,
+          fontSize: 14,
+        ),
+      ),
+    ],
+  );
+}
+
+
+

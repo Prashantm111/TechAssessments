@@ -1,14 +1,15 @@
 class Recharge {
   // Define class properties
   int? id;
-  int? benid; // Beneficiary  ID
-  int? userid; // User name
-  double? credit; // User email
-  String? date; // User email
+  int? benid;
+  int? userid;
+  double? credit;
+  String? date;
+  String? username;
 
   // Constructor with optional 'id' parameter
-  Recharge({this.benid, this.userid, this.credit, this.id})
-      : date = DateTime.now().toString();
+  Recharge({this.benid, this.userid, this.credit, this.username})
+      : date = DateTime.now().millisecondsSinceEpoch.toString();
 
   // Convert a Note into a Map. The keys must correspond to the names of the
   // columns in the database.
@@ -18,6 +19,7 @@ class Recharge {
     userid = map['userid'];
     credit = map['credit'];
     date = map['date'];
+    username = map['username'];
   }
 
   Map<String, dynamic> toJson() {
@@ -26,6 +28,7 @@ class Recharge {
       'userid': userid,
       'credit': credit,
       'date': date,
+      'username': username,
     };
   }
 }

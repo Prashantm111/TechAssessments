@@ -1,9 +1,9 @@
 class Beneficiary {
   // Define class properties
-  int? id; // Beneficiary  ID
+  int? id; // Beneficiary  ID Auto
   String? name; // User name
-  String? number; // User email
-  int?  userid; // User email
+  String? number; // User Mobile Number
+  int?  userid; // User Id Who adding Beneficiary in table
 
   // Constructor with optional 'id' parameter
   Beneficiary(this.name, this.number, this.userid, {this.id});
@@ -14,6 +14,7 @@ class Beneficiary {
     id = map['id'];
     name = map['name'];
     number = map['number'];
+    userid = map['userid'];
   }
 
   Map<String, dynamic> toJson() {

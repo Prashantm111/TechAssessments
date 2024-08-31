@@ -1,13 +1,12 @@
 // Import the plugins Path provider and SQLite.
 import 'dart:io' as io;
 
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:techassesment/data/Beneficiary.dart';
 import 'package:techassesment/data/Recharge.dart';
-import 'package:techassesment/data/UserInfoModel.dart';
+import 'package:techassesment/data/UserInfo.dart';
 
 // Import UserModel
 class DatabaseHelper {
@@ -24,13 +23,13 @@ class DatabaseHelper {
   // path to perform database upgrades and downgrades.
   static const int versionNumber = 1;
 
-  // Table name
+  // User Info Table name
   static const String tableUserInfo = 'UserInfo';
 
-  // Table name Beneficiary
+  // Beneficiary Table name
   static const String tableBeneficiary = 'BeneficiaryTable';
 
-  // Table name Beneficiary
+  // Recharge Table name
   static const String tableRecharge = 'RechargeTable';
 
   // Table (UsersInfo) Columns
@@ -40,9 +39,8 @@ class DatabaseHelper {
   static const String colStatus = 'status';
   static const String colCredit = 'credit';
   static const String colUserID = 'userid';
-
+  static const String colUsername = 'username';
   static const String colBeneficiaryID = 'benid';
-
   static const String colRechargeAmount = 'amount';
   static const String colRechargeDate = 'date';
 
@@ -98,8 +96,11 @@ class DatabaseHelper {
         " $colUserID INTEGER, "
         " $colBeneficiaryID INTEGER , "
         " $colCredit REAL NOT NULL default 0.0,"
-        " $colRechargeDate TEXT"
+        " $colRechargeDate TEXT, "
+        " $colUsername TEXT"
         ")");
+
+    // Add 2 user in usertable as verified and non verified user
   }
 
   Future<List<UserInfoModel>> getAllUsers() async {
@@ -137,7 +138,7 @@ class DatabaseHelper {
     return result.map((json) => Beneficiary.fromJson(json)).toList();
   }
 
-  // Serach note by Id
+  // get User By status veriefied = 0or non verified =1
   Future<UserInfoModel?> getUserByStatus(String status) async {
     final db = await database;
     final maps = await db.query(
@@ -150,6 +151,25 @@ class DatabaseHelper {
       return UserInfoModel.fromJson(maps.first);
     } else {
       return null;
+    }
+  }
+
+  // Get the total amount of recharge in 1 calender month
+  Future<double?> getTotalRechargeByUser(int beneficiaryID) async {
+    final db = await database;
+    final maps = await db.query(
+      tableRecharge,
+      where: '$colBeneficiaryID = ?',
+      whereArgs: [beneficiaryID],
+    );
+
+    if (maps.isNotEmpty) {
+      var sum = 0.0;
+      var list = maps.map((json) => Recharge.fromJson(json)).toList();
+      list.forEach((element) => sum += element.credit!);
+      return sum;
+    } else {
+      return 0.0;
     }
   }
 
@@ -167,15 +187,16 @@ class DatabaseHelper {
   }
 
   // Define a function that inserts Users into the database
-  Future<void> insertRecharge(Recharge recharge) async {
+  Future<int> insertRecharge(Recharge recharge) async {
     // Get a reference to the database.
     final db = await database;
     var res = await db.insert(tableRecharge, recharge.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+    return res;
   }
 
   // Define a function that inserts notes into the database
-  Future<void> insertBeneficiary(Beneficiary note) async {
+  Future<Beneficiary> insertBeneficiary(Beneficiary note) async {
     // Get a reference to the database.
     final db = await database;
 
@@ -185,6 +206,19 @@ class DatabaseHelper {
     // In this case, replace any previous data.
     await db.insert(tableBeneficiary, note.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+
+    /*var datamap = await db.rawQuery( //SELECT co from your_table_name order by ROWID DESC limit 1
+        "SELECT colId FROM $tableBeneficiary WHERE id=(SELECT max(id) FROM $colId, []");*/
+
+    var datamap = await db
+        .rawQuery(//SELECT co from your_table_name order by ROWID DESC limit 1
+            "SELECT * FROM $tableBeneficiary order by  $colId DESC limit 1");
+
+    if (datamap.isNotEmpty) {
+      return Beneficiary.fromJson(datamap.first);
+    } else {
+      return note;
+    }
   }
 
   // Define a function to update a note
@@ -200,25 +234,8 @@ class DatabaseHelper {
     return res;
   }
 
-  // Define a function to delete a note
-  Future<void> delete(int id) async {
-    // Get a reference to the database.
-    final db = await database;
-    try {
-      // Remove the Note from the database.
-      await db.delete(tableUserInfo,
-          // Use a `where` clause to delete a specific Note.
-          where: "$colId = ?",
-          // Pass the Dog's id as a whereArg to prevent SQL injection.
-          whereArgs: [id]);
-    } catch (err) {
-      debugPrint("Something went wrong when deleting an item: $err");
-    }
-  }
-
   Future close() async {
     final db = await database;
     db.close();
   }
-
 }
