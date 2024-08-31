@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:techassesment/data/UserInfo.dart';
@@ -11,6 +13,7 @@ class AppBloc extends Cubit<AppState> {
   AppBloc(this.databaseHelper) : super(const AppState()) {
     insertUserInDB();
   }
+
 
   final DatabaseHelper databaseHelper;
 

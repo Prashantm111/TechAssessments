@@ -7,7 +7,7 @@ class AppState extends Equatable {
   final UserInfoModel? userInfoModel;
   final Beneficiary? beneficiary;
   final bool isLoading;
-
+ 
   @override
   List<Object?> get props => [userInfoModel, isLoading, beneficiary];
 

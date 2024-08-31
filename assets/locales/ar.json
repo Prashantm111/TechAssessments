@@ -1,0 +1,23 @@
+{
+  "app_name": "طلبي",
+  "language": "Language",
+  "next": "لغة",
+  "login_screen": "شاشة تسجيل الدخول",
+  "home_screen": "الشاشة الرئيسية",
+  "welcome_to": "Welcome to",
+  "please_continue_as": "Please continue as...",
+  "verified_user": "Verified user",
+  "non_verified_user": "Non verified user",
+  "add_money": "Add Money",
+  "credit_balance": "Credit Balance",
+  "history": "History",
+  "recharge": "Recharge",
+  "no_recharge_done": "No recharge done",
+  "no_beneficiary_ad": "No beneficiary added",
+  "add_beneficiary": "Add Beneficiary",
+  "add_credit": "Add credit",
+  "enter_amount": "Enter amount",
+  "enter_name": "Enter name",
+  "enter_number": "Enter number",
+  "add": "Add"
+}

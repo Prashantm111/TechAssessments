@@ -4,13 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:techassesment/common/bloc/app_bloc.dart';
 import 'package:techassesment/data/UserInfo.dart';
+import 'package:techassesment/main.dart';
 import 'package:techassesment/screens/home/bloc/home_cubit.dart';
 import 'package:techassesment/screens/topup/TopUpScreen.dart';
 import 'package:techassesment/services/database_helper.dart';
 
 import '../../data/Beneficiary.dart';
 import '../../resource/Color.dart';
+import '../../utils/AppLocalizations.dart';
 import '../../utils/AppWidgets.dart';
+import '../../utils/translation_datasource.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home-screen';
@@ -47,7 +50,9 @@ class HomeUi extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: const AppToolBar(toolbarTittle: "Home Screen"),
+          appBar: AppToolBar(
+            toolbarTittle: LocaleTexts.home_screen.tr(context),
+          ),
           body: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
@@ -60,7 +65,7 @@ class HomeUi extends StatelessWidget {
                   ),
                   Center(
                     child: UserProfileCardItem(
-                        context, userInfoModel.name!, userInfoModel.number!),
+                        context, userInfoModel),
                   ),
                   userCreditInfo(context, addMoneyController),
                   Padding(
@@ -89,12 +94,12 @@ class HomeUi extends StatelessWidget {
                               Container(
                                 alignment: Alignment.center,
                                 width: double.infinity,
-                                child: const Text("Rechanrge"),
+                                child: Text(LocaleTexts.recharge.tr(context)),
                               ),
                               Container(
                                 alignment: Alignment.center,
                                 width: double.infinity,
-                                child: const Text("History"),
+                                child: Text(LocaleTexts.history.tr(context)),
                               ),
                             ],
                           ),
@@ -110,8 +115,10 @@ class HomeUi extends StatelessWidget {
                       child: Column(
                         children: [
                           Visibility(
-                            visible: (state.rechargesList == null || state.rechargesList!.isEmpty),
-                            child: const Text("No Recharge done yet "),
+                            visible: (state.rechargesList == null ||
+                                state.rechargesList!.isEmpty),
+                            child:
+                                Text(LocaleTexts.no_recharge_done.tr(context)),
                           ),
                           ListView(
                             primary: false,
@@ -144,7 +151,7 @@ class HomeUi extends StatelessWidget {
         Visibility(
           visible:
               (state.beneficiaryList == null || state.beneficiaryList!.isEmpty),
-          child: const Text("No Beneficiary Added"),
+          child: Text(LocaleTexts.no_beneficiary_ad.tr(context)),
         ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -166,7 +173,7 @@ class HomeUi extends StatelessWidget {
             onPressed: () {
               showAddBeneficiaryDialog(context, userInfoModel.id);
             },
-            child: const Text("Add Beneficiary"),
+            child: Text(LocaleTexts.add_beneficiary.tr(context)),
           ),
         )
       ],
@@ -249,8 +256,8 @@ class HomeUi extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Credit Balance",
+              Text(
+                LocaleTexts.credit_balance.tr(context),
                 style: TextStyle(color: Colors.white),
               ),
               Text(
@@ -265,7 +272,7 @@ class HomeUi extends StatelessWidget {
             onPressed: () {
               showAddMoneyDialog(context, addMoneyController);
             },
-            child: const Text("Add Money"),
+            child: Text(LocaleTexts.add_money.tr(context)),
           )
         ],
       ),
@@ -277,7 +284,7 @@ class HomeUi extends StatelessWidget {
     return showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-              title: const Text("Add Credit"),
+              title: Text(LocaleTexts.add_credit.tr(context)),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -289,8 +296,8 @@ class HomeUi extends StatelessWidget {
                     controller: addMoneyController,
                     keyboardType: TextInputType.number,
                     maxLength: 5,
-                    decoration: const InputDecoration(
-                      label: Text("Enter Amount"),
+                    decoration: InputDecoration(
+                      label: Text(LocaleTexts.enter_amount.tr(context)),
                     ),
                   ),
                   ElevatedButton(
@@ -304,9 +311,9 @@ class HomeUi extends StatelessWidget {
 
                         Navigator.of(context).pop();
                       },
-                      child: const Text(
-                        "Add Credit",
-                        style: TextStyle(color: Colors.white),
+                      child: Text(
+                        LocaleTexts.add_credit.tr(context),
+                        style: const TextStyle(color: Colors.white),
                       ))
                 ],
               ),
@@ -320,7 +327,7 @@ class HomeUi extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text("Add Beneficiary"),
+        title: Text(LocaleTexts.add_beneficiary.tr(context)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -329,8 +336,8 @@ class HomeUi extends StatelessWidget {
               controller: myControllerName,
               keyboardType: TextInputType.name,
               maxLength: 20,
-              decoration: const InputDecoration(
-                label: Text("Enter Name"),
+              decoration: InputDecoration(
+                label: Text(LocaleTexts.enter_name.tr(context)),
               ),
             ),
             TextField(
@@ -340,8 +347,9 @@ class HomeUi extends StatelessWidget {
               ],
               keyboardType: TextInputType.phone,
               maxLength: 9,
-              decoration: const InputDecoration(
-                  label: Text("Enter Number"), prefix: Text("+971")),
+              decoration: InputDecoration(
+                  label: Text(LocaleTexts.enter_number.tr(context)),
+                  prefix: const Text("+971")),
             ),
             const SizedBox(
               height: 15,
@@ -413,8 +421,9 @@ class BeneficiaryRowCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "${beneficiary.name}",
+            "${beneficiary.name}\n",
             maxLines: 2,
+
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.black,

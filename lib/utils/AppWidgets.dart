@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:techassesment/data/UserInfo.dart';
 import 'package:techassesment/resource/HeightAndWidth.dart';
 
 import '../resource/Color.dart';
+
 
 class MyButton extends StatelessWidget {
   final String title;
@@ -151,7 +153,15 @@ String getInitials(String name) => name.isNotEmpty
     ? name.trim().split(' ').map((l) => l[0]).take(2).join()
     : '';
 
-Column UserProfileCardItem(BuildContext context, String name, String number) {
+Column UserProfileCardItem(BuildContext context, UserInfoModel userinfo) {
+  String userStatus = "";
+  if (userinfo.status! == "1") {
+    userStatus = "Verified";
+  } else {
+    userStatus = "Non-Verified";
+  }
+
+
   return Column(
     children: [
       Container(
@@ -163,7 +173,7 @@ Column UserProfileCardItem(BuildContext context, String name, String number) {
         ),
         child: Center(
           child: Text(
-            getInitials(name),
+            getInitials(userinfo.name!),
             style: const TextStyle(color: Colors.white, fontSize: 35),
           ),
         ),
@@ -172,20 +182,22 @@ Column UserProfileCardItem(BuildContext context, String name, String number) {
         height: 8,
       ),
       Text(
-        name,
+        userinfo.name!,
         style: const TextStyle(
             color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
       ),
       Text(
-        number,
+        userinfo.number!,
         style: const TextStyle(
           color: Colors.black87,
           fontSize: 14,
         ),
       ),
+      Text(
+        userStatus,
+        style: const TextStyle(
+            color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+      ),
     ],
   );
 }
-
-
-

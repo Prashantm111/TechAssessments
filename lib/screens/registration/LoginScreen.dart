@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:techassesment/common/bloc/app_bloc.dart';
+import 'package:techassesment/main.dart';
 import 'package:techassesment/resource/Color.dart';
 import 'package:techassesment/screens/home/HomeScreen.dart';
 import 'package:techassesment/utils/AppWidgets.dart';
+
+import '../../utils/AppLocalizations.dart';
+import '../../utils/translation_datasource.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -16,7 +20,9 @@ class LoginScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          appBar: const AppToolBar(toolbarTittle: "Login Screen"),
+          appBar: AppToolBar(
+            toolbarTittle: LocaleTexts.login_screen.tr(context),
+          ),
           body: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Stack(
@@ -30,8 +36,8 @@ class LoginScreen extends StatelessWidget {
                     Column(
                       children: [
                         const SizedBox(height: 50),
-                        const Text(
-                          "Welcome to",
+                        Text(
+                          LocaleTexts.welcome_to.tr(context),
                           style: TextStyle(
                               color: ColorSelect.primaryColor,
                               fontSize: 40,
@@ -54,8 +60,8 @@ class LoginScreen extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-                        const Text(
-                          "Please continue as...",
+                        Text(
+                          LocaleTexts.please_continue_as.tr(context),
                           style: TextStyle(color: Colors.black45, fontSize: 16),
                           textAlign: TextAlign.center,
                         ),
@@ -63,7 +69,7 @@ class LoginScreen extends StatelessWidget {
                           height: 5,
                         ),
                         MyButton(
-                            title: "Verified User",
+                            title:   LocaleTexts.verified_user.tr(context),
                             callback: () {
                               context
                                   .read<AppBloc>()
@@ -77,18 +83,20 @@ class LoginScreen extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        MyButton(title: "Non Verified User", callback: () {
-                          {
-                            context
-                                .read<AppBloc>()
-                                .loginUser(false)
-                                .then((val) {
-                              Navigator.of(context).pushNamed(
-                                HomeScreen.routeName,
-                              );
-                            });
-                          }
-                        })
+                        MyButton(
+                            title:  LocaleTexts.non_verified_user.tr(context),
+                            callback: () {
+                              {
+                                context
+                                    .read<AppBloc>()
+                                    .loginUser(false)
+                                    .then((val) {
+                                  Navigator.of(context).pushNamed(
+                                    HomeScreen.routeName,
+                                  );
+                                });
+                              }
+                            })
                       ],
                     ),
                   ],
