@@ -85,6 +85,9 @@ class TopUpUI extends StatelessWidget {
                           Text(
                             "${state.selectedBeneficiary?.number}",
                             style: const TextStyle(color: Colors.white, fontSize: 16),
+                          ),Text(
+                            "${state.selectedBeneficiary?.nickname}",
+                            style: const TextStyle(color: Colors.white, fontSize: 20),
                           ),
                         ],
                       ),

@@ -43,6 +43,7 @@ class DatabaseHelper {
   static const String colBeneficiaryID = 'benid';
   static const String colRechargeAmount = 'amount';
   static const String colRechargeDate = 'date';
+  static const String colNickName = 'nickname';
 
   // Define a getter to access the database asynchronously.
   Future<Database> get database async {
@@ -86,10 +87,11 @@ class DatabaseHelper {
         " $colId INTEGER PRIMARY KEY AUTOINCREMENT, "
         " $colName TEXT NOT NULL, "
         " $colUserID INTEGER , "
-        " $colNumber TEXT"
+        " $colNumber TEXT, "
+        " $colNickName TEXT"
         ")");
 
-    // Recharge Table Table
+    // Recharge History  Table
 
     await db.execute("CREATE TABLE IF NOT EXISTS $tableRecharge ("
         " $colId INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -100,7 +102,6 @@ class DatabaseHelper {
         " $colUsername TEXT"
         ")");
 
-    // Add 2 user in usertable as verified and non verified user
   }
 
   Future<List<UserInfoModel>> getAllUsers() async {

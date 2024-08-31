@@ -25,6 +25,7 @@ class LocaleTexts {
   static const String add_credit = "add_credit";
   static const String enter_amount = "enter_amount";
   static const String enter_name = "enter_name";
+  static const String enter_nick_name = "enter_nick_name";
   static const String enter_number = "enter_number";
   static const String add = "add";
 }

@@ -15,6 +15,7 @@ void main() {
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -28,6 +29,7 @@ class _MyAppState extends State<MyApp> {
       child: BlocProvider<AppBloc>(
         create: (context) => AppBloc(DatabaseHelper.instance),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           supportedLocales: const [
             Locale('en'),
             Locale('ar'),

@@ -3,10 +3,11 @@ class Beneficiary {
   int? id; // Beneficiary  ID Auto
   String? name; // User name
   String? number; // User Mobile Number
-  int?  userid; // User Id Who adding Beneficiary in table
+  int? userid; // User Id Who adding Beneficiary in table
+  String? nickname; // User Id Who adding Beneficiary in table
 
   // Constructor with optional 'id' parameter
-  Beneficiary(this.name, this.number, this.userid, {this.id});
+  Beneficiary(this.name, this.number, this.userid, this.nickname, {this.id});
 
   // Convert a Note into a Map. The keys must correspond to the names of the
   // columns in the database.
@@ -15,6 +16,7 @@ class Beneficiary {
     name = map['name'];
     number = map['number'];
     userid = map['userid'];
+    nickname = map['nickname'];
   }
 
   Map<String, dynamic> toJson() {
@@ -22,6 +24,7 @@ class Beneficiary {
       'name': name,
       'number': number,
       'userid': userid,
+      'nickname': nickname,
     };
   }
 }

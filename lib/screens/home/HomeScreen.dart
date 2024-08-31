@@ -64,8 +64,7 @@ class HomeUi extends StatelessWidget {
                     height: 15,
                   ),
                   Center(
-                    child: UserProfileCardItem(
-                        context, userInfoModel),
+                    child: UserProfileCardItem(context, userInfoModel),
                   ),
                   userCreditInfo(context, addMoneyController),
                   Padding(
@@ -323,6 +322,7 @@ class HomeUi extends StatelessWidget {
   void showAddBeneficiaryDialog(BuildContext context, int? userid) {
     var myControllerName = TextEditingController();
     var myControllerNumber = TextEditingController();
+    var myControllerNickname = TextEditingController();
 
     showDialog(
       context: context,
@@ -335,7 +335,7 @@ class HomeUi extends StatelessWidget {
             TextField(
               controller: myControllerName,
               keyboardType: TextInputType.name,
-              maxLength: 20,
+              maxLength: 12,
               decoration: InputDecoration(
                 label: Text(LocaleTexts.enter_name.tr(context)),
               ),
@@ -351,19 +351,29 @@ class HomeUi extends StatelessWidget {
                   label: Text(LocaleTexts.enter_number.tr(context)),
                   prefix: const Text("+971")),
             ),
+            TextField(
+              controller: myControllerNickname,
+              keyboardType: TextInputType.name,
+              maxLength: 20,
+              decoration: InputDecoration(
+                label: Text(LocaleTexts.enter_nick_name.tr(context)),
+              ),
+            ),
             const SizedBox(
               height: 15,
             ),
             ElevatedButton(
               onPressed: () {
                 if (myControllerName.text.trim().length > 3 &&
+                    myControllerNickname.text.trim().length > 3 &&
                     myControllerNumber.text.toString().trim().length == 9) {
                   context
                       .read<HomeCubit>()
                       .addBeneficiary(Beneficiary(
                           myControllerName.text.trim(),
                           "+971${myControllerNumber.text.toString().trim()}",
-                          userid))
+                          userid,
+                          myControllerNickname.text))
                       .then((val) {
                     /* ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("You cant add more than 5 Beneficiary "),
@@ -421,9 +431,7 @@ class BeneficiaryRowCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "${beneficiary.name}\n",
-            maxLines: 2,
-
+            "${beneficiary.name}",
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.black,
