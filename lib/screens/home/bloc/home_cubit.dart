@@ -52,21 +52,25 @@ class HomeCubit extends Cubit<HomeState> {
     userInfoModel.credit = newCredit;
     return await databaseHelper.addMoneyToUser(userInfoModel);
   }
+
 /* Add the Beneficiary to the DB */
-  Future<void> addBeneficiary(Beneficiary data) async {
-    if (state.beneficiaryList!.length < 55) {
+  Future<bool> addBeneficiary(Beneficiary data) async {
+    if (state.beneficiaryList!.length < 6) {
       var newBeneficiary = await databaseHelper.insertBeneficiary(data);
       List<Beneficiary> oldlist = [];
       oldlist.addAll(state.beneficiaryList ?? []);
       oldlist.add(newBeneficiary);
       emit(state.copyWith(beneficiaryList: oldlist));
+      return true;
+    } else {
+      return false;
     }
   }
-
 
   String getInitials(String name) => name.isNotEmpty
       ? name.trim().split(' ').map((l) => l[0]).take(2).join()
       : '';
+
 /* to change view of recharge and tab */
   onToggleTab(int position) {
     if (position == 0) {

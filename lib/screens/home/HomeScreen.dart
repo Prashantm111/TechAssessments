@@ -68,7 +68,7 @@ class HomeUi extends StatelessWidget {
                   ),
                   userCreditInfo(context, addMoneyController),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
                     child: DefaultTabController(
                         length: 2,
                         child: Container(
@@ -305,10 +305,14 @@ class HomeUi extends StatelessWidget {
                         elevation: 3,
                       ),
                       onPressed: () {
-                        context.read<HomeCubit>().addMoneyToUser(userInfoModel,
-                            double.parse(addMoneyController.text));
-
-                        Navigator.of(context).pop();
+                        context
+                            .read<HomeCubit>()
+                            .addMoneyToUser(userInfoModel,
+                                double.parse(addMoneyController.text))
+                            .then((val) {
+                          addMoneyController.text = "";
+                          Navigator.of(context).pop();
+                        });
                       },
                       child: Text(
                         LocaleTexts.add_credit.tr(context),
@@ -335,7 +339,10 @@ class HomeUi extends StatelessWidget {
             TextField(
               controller: myControllerName,
               keyboardType: TextInputType.name,
-              maxLength: 12,
+              maxLength: 20,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9 ]"))
+              ],
               decoration: InputDecoration(
                 label: Text(LocaleTexts.enter_name.tr(context)),
               ),
@@ -355,6 +362,9 @@ class HomeUi extends StatelessWidget {
               controller: myControllerNickname,
               keyboardType: TextInputType.name,
               maxLength: 20,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9  ]"))
+              ],
               decoration: InputDecoration(
                 label: Text(LocaleTexts.enter_nick_name.tr(context)),
               ),
@@ -375,11 +385,15 @@ class HomeUi extends StatelessWidget {
                           userid,
                           myControllerNickname.text))
                       .then((val) {
-                    /* ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("You cant add more than 5 Beneficiary "),
-                    ));*/
+                    if (!val) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            "You wont allow to add more than 5 Beneficiary "),
+                      ));
+
+                    }
+                    Navigator.of(context).pop();
                   });
-                  Navigator.of(context).pop();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Please add valid name and mobile number"),

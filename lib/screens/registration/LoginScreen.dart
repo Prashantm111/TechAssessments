@@ -47,8 +47,7 @@ class LoginScreen extends StatelessWidget {
                         SvgPicture.asset(
                           'assets/images/company_logo.svg',
                           semanticsLabel: 'My SVG Image',
-                          colorFilter: const ColorFilter.mode(
-                              ColorSelect.primaryColor, BlendMode.srcIn),
+
                           height: 100,
                           width: 70,
                         ),
